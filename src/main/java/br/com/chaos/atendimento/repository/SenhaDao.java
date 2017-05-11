@@ -9,7 +9,7 @@ import br.com.chaos.atendimento.model.StatusSenha;
 
 public class SenhaDao {
 
-	private static Map<StatusSenha, LinkedList<Senha>> senhas = new HashMap<>();
+	private Map<StatusSenha, LinkedList<Senha>> senhas = new HashMap<>();
 
 	private Map<StatusSenha, LinkedList<Senha>> getSenhas() {
 		if (senhas.isEmpty()) {

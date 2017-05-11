@@ -9,8 +9,21 @@ import br.com.chaos.atendimento.repository.SenhaDao;
 
 public class ControladorAtendimento {
 	
+	public ControladorAtendimento() {
+		senhaDao = new SenhaDao();
+	}
+	
+	private SenhaDao senhaDao;
+	
+	public LinkedList<Senha> getListaAguardando() {
+		return senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
+	}
+	
+	public LinkedList<Senha> getListaAtendidas() {
+		return senhaDao.getListaSenhas(StatusSenha.ATENDIDA);
+	}
+	
 	public void gerarNovaSenha() {
-		SenhaDao senhaDao = new SenhaDao();
 		Senha senha;
 		LinkedList<Senha> listaSenhas = senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
 		if(!listaSenhas.isEmpty()) {
@@ -22,17 +35,16 @@ public class ControladorAtendimento {
 		senhaDao.adicionarSenha(senha);
 	}
 	
+	public void atenderProximaSenha() {
+		Senha senha = proximaSenha();
+		senhaDao.removerSenha(senha);
+	}
+	
 	public Senha proximaSenha() {
-		SenhaDao senhaDao = new SenhaDao();
 		LinkedList<Senha> listaSenhas = senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
 		return listaSenhas.getFirst();
 	}
 	
-	public void atenderSenha() {
-		SenhaDao senhaDao = new SenhaDao();
-		Senha senha = proximaSenha();
-		senhaDao.removerSenha(senha);
-	}
 	
 
 }

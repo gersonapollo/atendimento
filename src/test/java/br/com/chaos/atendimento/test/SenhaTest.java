@@ -1,5 +1,7 @@
 package br.com.chaos.atendimento.test;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -16,15 +18,18 @@ public class SenhaTest {
 	
 	@Test
 	public void testaCriacaoListaSenhas() {
-		List<Senha> listaSenhas = senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
-		Assert.assertNotNull(listaSenhas);
+		ControladorAtendimento controlador = new ControladorAtendimento();
+		LinkedList<Senha> listaAguardando = controlador.getListaAguardando();
+		LinkedList<Senha> listaAtendidas = controlador.getListaAtendidas();
+		Assert.assertNotNull(listaAguardando);
+		Assert.assertNotNull(listaAtendidas);
 	}
 	
 	@Test
 	public void testaCriacaoNovaSenhaComListaVazia() {
 		ControladorAtendimento controlador = new ControladorAtendimento();
 		controlador.gerarNovaSenha();
-		List<Senha> listaSenhas = senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
+		List<Senha> listaSenhas = controlador.getListaAguardando();
 		Assert.assertFalse(listaSenhas.isEmpty());
 	}
 	
@@ -34,8 +39,24 @@ public class SenhaTest {
 		controlador.gerarNovaSenha();
 		controlador.gerarNovaSenha();
 		controlador.gerarNovaSenha();
-		List<Senha> listaSenhas = senhaDao.getListaSenhas(StatusSenha.AGUARDANDO);
-		Assert.assertEquals(4, listaSenhas.size());
+		List<Senha> listaSenhas = controlador.getListaAguardando();
+		Assert.assertEquals(3, listaSenhas.size());
+	}
+	
+	@Test
+	public void testaAtendimentoSenha() {
+		ControladorAtendimento controlador = new ControladorAtendimento();
+		controlador.gerarNovaSenha();
+		controlador.gerarNovaSenha();
+		controlador.gerarNovaSenha();
+		LinkedList<Senha> listaAguardando = controlador.getListaAguardando();
+		LinkedList<Senha> listaAtendidas = controlador.getListaAtendidas();
+		Assert.assertEquals(3, listaAguardando.size());
+		Assert.assertEquals(0, listaAtendidas.size());
+		controlador.atenderProximaSenha();
+		Assert.assertEquals(2, listaAguardando.size());
+		Assert.assertEquals(1, listaAtendidas.size());
+		
 	}
 
 }
